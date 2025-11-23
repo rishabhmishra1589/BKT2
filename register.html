@@ -10,6 +10,7 @@
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/register.css">
+    <link rel="stylesheet" href="assets/css/language-switcher.css">
 </head>
 <body>
 
@@ -22,13 +23,18 @@
         <div class="header-top">
             <div class="container">
                 <div class="header-top-links">
-                    <span>📞 Helpline: +91-1234-567890</span>
-                    <span>📧 info@chardhamyatra.org</span>
+                    <span>📞 Helpline: 0135-2741600</span>
+                    <span>📧 support-ucdb@uk.gov.in</span>
                 </div>
                 <div class="header-top-links">
                     <a href="index.html#weather">🌤️ Weather</a>
                     <a href="index.html#timings">⏰ Timings</a>
                     <a href="contact.html">📞 Contact</a>
+                    <div class="language-switcher">
+                        <button onclick="switchLanguage('en')" class="lang-btn active" id="lang-en" title="English">EN</button>
+                        <span style="color: rgba(255,255,255,0.5);">|</span>
+                        <button onclick="switchLanguage('hi')" class="lang-btn" id="lang-hi" title="हिन्दी">हिं</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -50,9 +56,9 @@
                     </button>
 
                     <ul class="nav-menu">
-                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html" data-translate="home">Home</a></li>
                         <li>
-                            <a href="temple.html">Temples</a>
+                            <a href="temple.html" data-translate="temples">Temples</a>
                             <div class="mega-menu">
                                 <div class="mega-menu-grid">
                                     <div class="mega-menu-column">
@@ -103,9 +109,9 @@
         <div class="container">
             <div class="register-hero-content">
                 <div class="char-dham-icon">🕉️</div>
-                <h1 class="register-hero-title devanagari">श्री यमुनागंगाकेदारबदरीश्वराः</h1>
-                <h2 class="register-hero-title devanagari">विजयन्तेतराम्</h2>
-                <p class="register-hero-subtitle">Char Dham Yatra Registration</p>
+                <h1 class="register-hero-title devanagari">श्रीयमुनागङ्गाकेदारबदरीश्वराः</h1>
+                <h2 class="register-hero-title devanagari">विजयन्ते</h2>
+                <p class="register-hero-subtitle" data-translate="char-dham-registration">Char Dham Yatra Registration</p>
                 <p class="register-hero-description">
                     Victory to the Sacred Four Dhams - Yamunotri, Gangotri, Kedarnath & Badrinath
                 </p>
@@ -527,26 +533,26 @@
             <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
                 <div class="timing-card scroll-reveal">
                     <div class="timing-icon">📞</div>
-                    <h4 class="timing-title">Helpline</h4>
-                    <p class="timing-description">+91-1234-567890<br>Mon-Sun: 9 AM - 6 PM</p>
+                    <h4 class="timing-title">Office Helpline</h4>
+                    <p class="timing-description">0135-2741600<br>Mon-Sat: 10 AM - 5 PM</p>
                 </div>
 
                 <div class="timing-card scroll-reveal">
                     <div class="timing-icon">📧</div>
                     <h4 class="timing-title">Email Support</h4>
-                    <p class="timing-description">register@chardhamyatra.org<br>Response within 24 hours</p>
+                    <p class="timing-description">support-ucdb@uk.gov.in<br>Response within 24 hours</p>
                 </div>
 
                 <div class="timing-card scroll-reveal">
-                    <div class="timing-icon">💬</div>
-                    <h4 class="timing-title">WhatsApp</h4>
-                    <p class="timing-description">+91-1234-567890<br>Quick assistance available</p>
+                    <div class="timing-icon">🛕</div>
+                    <h4 class="timing-title">Temple Helplines</h4>
+                    <p class="timing-description">Kedarnath: +91-8534001008<br>Badrinath: +91-8979001008</p>
                 </div>
 
                 <div class="timing-card scroll-reveal">
-                    <div class="timing-icon">❓</div>
-                    <h4 class="timing-title">FAQ</h4>
-                    <p class="timing-description"><a href="contact.html" style="color: white; text-decoration: underline;">Visit FAQ Section</a></p>
+                    <div class="timing-icon">📱</div>
+                    <h4 class="timing-title">General Enquiry</h4>
+                    <p class="timing-description">+91-7302257116<br>Online Services & Prasad</p>
                 </div>
             </div>
         </div>
@@ -559,13 +565,20 @@
                 <div class="footer-section">
                     <h3 class="devanagari">बद्रीनाथ केदारनाथ मंदिर समिति</h3>
                     <p style="color: rgba(255,255,255,0.8); margin-bottom: 1rem; line-height: 1.8;">
-                        Official website of Badrinath Kedarnath Temple Committee. Serving millions of devotees with blessed darshan and yatra services.
+                        Shri Badarinath Kedarnath Temple Committee (BKTC) - Constituted as per 1939 Act. Managing Shri Kedarnath Temple (11th Jyotirlinga) and Shri Badarinath Temple. Serving millions of devotees with blessed darshan and yatra services.
                     </p>
                     <div class="social-links">
-                        <a href="#" class="social-link" aria-label="Facebook">📘</a>
-                        <a href="#" class="social-link" aria-label="Twitter">🐦</a>
-                        <a href="#" class="social-link" aria-label="Instagram">📷</a>
-                        <a href="#" class="social-link" aria-label="YouTube">▶️</a>
+                        <a href="https://www.facebook.com/badrinathkedarnathtemplecommittee" target="_blank" class="social-link" aria-label="Facebook" title="Follow us on Facebook">📘</a>
+                        <a href="https://twitter.com/BKTC_Official" target="_blank" class="social-link" aria-label="Twitter" title="Follow us on Twitter">🐦</a>
+                        <a href="https://www.instagram.com/badrinath_kedarnath_official" target="_blank" class="social-link" aria-label="Instagram" title="Follow us on Instagram">📷</a>
+                        <a href="https://www.youtube.com/@BadrinathKedarnathTemple" target="_blank" class="social-link" aria-label="YouTube" title="Subscribe to our YouTube">▶️</a>
+                        <a href="https://badrinath-kedarnath.gov.in" target="_blank" class="social-link" aria-label="Website" title="Visit Official Website">🌐</a>
+                    </div>
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px;">
+                        <p style="font-size: 0.9rem; color: rgba(255,255,255,0.9); margin-bottom: 0.5rem;">📱 <strong>WhatsApp Prasad Order:</strong></p>
+                        <a href="https://wa.me/917302257116" target="_blank" style="color: #25D366; font-size: 1.1rem; font-weight: 600; text-decoration: none;">
+                            💬 +91-7302257116
+                        </a>
                     </div>
                 </div>
 
@@ -597,15 +610,15 @@
                     <h3>Contact Us</h3>
                     <div class="footer-contact-item">
                         <span class="footer-contact-icon">📍</span>
-                        <span>Badrinath Temple Committee Office<br>Chamoli, Uttarakhand - 246443</span>
+                        <span>Head Office, Saket, Lane No. 07<br>Canal Road, Dehradun<br>Uttarakhand - 248001</span>
                     </div>
                     <div class="footer-contact-item">
                         <span class="footer-contact-icon">📞</span>
-                        <span>+91-1234-567890<br>+91-1234-567891</span>
+                        <span>Office: 0135-2741600<br>Kedarnath: +91-8534001008<br>Badrinath: +91-8979001008</span>
                     </div>
                     <div class="footer-contact-item">
                         <span class="footer-contact-icon">📧</span>
-                        <span>info@chardhamyatra.org</span>
+                        <span>support-ucdb@uk.gov.in</span>
                     </div>
                 </div>
             </div>
@@ -622,6 +635,7 @@
         <button class="floating-btn scroll-top" aria-label="Scroll to Top">⬆️</button>
     </div>
 
+    <script src="assets/js/language-switcher.js"></script>
     <script src="assets/js/main.js"></script>
 
 </body>

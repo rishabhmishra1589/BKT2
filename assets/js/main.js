@@ -650,29 +650,231 @@ function initDonationOptions() {
 }
 
 // ============================================
-// WEATHER UPDATE (Demo)
+// REAL-TIME WEATHER UPDATE
 // ============================================
 
-function updateWeather() {
-    const weatherWidget = $('.weather-widget');
+// Weather API Configuration
+const WEATHER_CONFIG = {
+    // Option 1: OpenWeatherMap (requires free API key from openweathermap.org)
+    // API_KEY: 'YOUR_API_KEY_HERE',
+    // BASE_URL: 'https://api.openweathermap.org/data/2.5/weather',
     
-    if (weatherWidget) {
-        // Demo weather data
-        const weatherData = {
-            temp: '12°C',
-            location: 'Badrinath',
-            condition: '☁️ Cloudy',
-            description: 'Pleasant weather for Darshan'
-        };
-        
-        const tempEl = weatherWidget.querySelector('.weather-temp');
-        const locationEl = weatherWidget.querySelector('.weather-location');
-        const iconEl = weatherWidget.querySelector('.weather-icon');
-        
-        if (tempEl) tempEl.textContent = weatherData.temp;
-        if (locationEl) locationEl.textContent = weatherData.location;
-        if (iconEl) iconEl.textContent = weatherData.condition;
+    // Option 2: Open-Meteo (FREE, NO API KEY REQUIRED) - Currently Active
+    BASE_URL: 'https://api.open-meteo.com/v1/forecast',
+    USE_OPEN_METEO: true, // Set to false to use OpenWeatherMap instead
+    UNITS: 'metric' // Celsius
+};
+
+// Weather icon mapping
+function getWeatherIcon(weatherCode, description) {
+    const iconMap = {
+        // Thunderstorm
+        200: '⛈️', 201: '⛈️', 202: '⛈️', 210: '🌩️', 211: '🌩️', 212: '⛈️', 221: '⛈️', 230: '⛈️', 231: '⛈️', 232: '⛈️',
+        // Drizzle
+        300: '🌦️', 301: '🌦️', 302: '🌧️', 310: '🌦️', 311: '🌦️', 312: '🌧️', 313: '🌦️', 314: '🌧️', 321: '🌦️',
+        // Rain
+        500: '🌧️', 501: '🌧️', 502: '⛈️', 503: '⛈️', 504: '⛈️', 511: '🌨️', 520: '🌦️', 521: '🌧️', 522: '⛈️', 531: '⛈️',
+        // Snow
+        600: '🌨️', 601: '❄️', 602: '❄️', 611: '🌨️', 612: '🌨️', 613: '🌨️', 615: '🌨️', 616: '🌨️', 620: '🌨️', 621: '❄️', 622: '❄️',
+        // Atmosphere
+        701: '🌫️', 711: '🌫️', 721: '🌫️', 731: '🌫️', 741: '🌫️', 751: '🌫️', 761: '🌫️', 762: '🌫️', 771: '💨', 781: '🌪️',
+        // Clear
+        800: '☀️',
+        // Clouds
+        801: '🌤️', 802: '⛅', 803: '🌥️', 804: '☁️'
+    };
+    
+    return iconMap[weatherCode] || '🌤️';
+}
+
+// Fetch weather data for a location
+async function fetchWeatherData(lat, lon, locationName) {
+    try {
+        if (WEATHER_CONFIG.USE_OPEN_METEO) {
+            // Use Open-Meteo API (FREE, NO API KEY REQUIRED)
+            const url = `${WEATHER_CONFIG.BASE_URL}?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Asia/Kolkata`;
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            const current = data.current;
+            
+            return {
+                temp: Math.round(current.temperature_2m),
+                feelsLike: Math.round(current.temperature_2m), // Open-Meteo doesn't provide feels_like
+                humidity: current.relative_humidity_2m,
+                windSpeed: Math.round(current.wind_speed_10m),
+                description: getWeatherDescription(current.weather_code),
+                icon: getWeatherIconFromCode(current.weather_code),
+                weatherCode: current.weather_code,
+                locationName: locationName
+            };
+        } else {
+            // Use OpenWeatherMap API (requires API key)
+            if (!WEATHER_CONFIG.API_KEY || WEATHER_CONFIG.API_KEY === 'YOUR_API_KEY_HERE') {
+                throw new Error('API_KEY_NOT_SET');
+            }
+            
+            const url = `${WEATHER_CONFIG.BASE_URL}?lat=${lat}&lon=${lon}&units=${WEATHER_CONFIG.UNITS}&appid=${WEATHER_CONFIG.API_KEY}`;
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            return {
+                temp: Math.round(data.main.temp),
+                feelsLike: Math.round(data.main.feels_like),
+                humidity: data.main.humidity,
+                windSpeed: Math.round(data.wind.speed * 3.6), // Convert m/s to km/h
+                description: data.weather[0].description,
+                icon: getWeatherIcon(data.weather[0].id, data.weather[0].description),
+                weatherCode: data.weather[0].id,
+                locationName: locationName
+            };
+        }
+    } catch (error) {
+        console.error(`Weather fetch error for ${locationName}:`, error);
+        return null;
     }
+}
+
+// Get weather description from Open-Meteo weather code
+function getWeatherDescription(code) {
+    const descriptions = {
+        0: 'Clear sky',
+        1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
+        45: 'Foggy', 48: 'Depositing rime fog',
+        51: 'Light drizzle', 53: 'Moderate drizzle', 55: 'Dense drizzle',
+        56: 'Light freezing drizzle', 57: 'Dense freezing drizzle',
+        61: 'Slight rain', 63: 'Moderate rain', 65: 'Heavy rain',
+        66: 'Light freezing rain', 67: 'Heavy freezing rain',
+        71: 'Slight snow', 73: 'Moderate snow', 75: 'Heavy snow',
+        77: 'Snow grains',
+        80: 'Slight rain showers', 81: 'Moderate rain showers', 82: 'Violent rain showers',
+        85: 'Slight snow showers', 86: 'Heavy snow showers',
+        95: 'Thunderstorm', 96: 'Thunderstorm with slight hail', 99: 'Thunderstorm with heavy hail'
+    };
+    return descriptions[code] || 'Unknown';
+}
+
+// Get weather icon from Open-Meteo weather code
+function getWeatherIconFromCode(code) {
+    if (code === 0) return '☀️';
+    if (code === 1) return '🌤️';
+    if (code === 2) return '⛅';
+    if (code === 3) return '☁️';
+    if (code === 45 || code === 48) return '🌫️';
+    if (code >= 51 && code <= 57) return '🌦️';
+    if (code >= 61 && code <= 67) return '🌧️';
+    if (code >= 71 && code <= 77) return '❄️';
+    if (code >= 80 && code <= 82) return '⛈️';
+    if (code >= 85 && code <= 86) return '🌨️';
+    if (code >= 95 && code <= 99) return '⛈️';
+    return '🌤️';
+}
+
+// Update weather widget UI
+function updateWeatherWidget(widget, weatherData) {
+    const loadingEl = widget.querySelector('.weather-loading');
+    const contentEl = widget.querySelector('.weather-content');
+    
+    if (!weatherData) {
+        // Show error message
+        if (loadingEl) {
+            loadingEl.innerHTML = `
+                <div style="font-size: 2rem;">⚠️</div>
+                <p style="font-size: 0.9rem;">Weather data unavailable</p>
+                <p style="font-size: 0.75rem; margin-top: 0.5rem;">Check API key configuration</p>
+            `;
+        }
+        return;
+    }
+    
+    // Hide loading, show content
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (contentEl) contentEl.style.display = 'block';
+    
+    // Update elements
+    const iconEl = widget.querySelector('.weather-icon');
+    const tempEl = widget.querySelector('.weather-temp');
+    const descEl = widget.querySelector('.weather-description');
+    const humidityEl = widget.querySelector('.humidity');
+    const windEl = widget.querySelector('.wind');
+    
+    if (iconEl) iconEl.textContent = weatherData.icon;
+    if (tempEl) tempEl.textContent = `${weatherData.temp}°C`;
+    if (descEl) descEl.textContent = weatherData.description;
+    if (humidityEl) humidityEl.textContent = weatherData.humidity;
+    if (windEl) windEl.textContent = weatherData.windSpeed;
+}
+
+// Get weather advice based on temperature
+function getWeatherAdvice(temp, description) {
+    if (temp < 5) return 'Very cold - Heavy woolen clothes required';
+    if (temp < 10) return 'Cold - Carry warm clothes';
+    if (temp < 15) return 'Cool - Light woolens recommended';
+    if (temp < 25) return 'Pleasant weather for darshan';
+    if (temp < 30) return 'Warm - Carry light clothes';
+    return 'Hot - Stay hydrated';
+}
+
+// Main weather update function
+async function updateWeather() {
+    const weatherWidgets = $$('.weather-widget');
+    
+    if (weatherWidgets.length === 0) return;
+    
+    // Fetch weather for all locations
+    const weatherPromises = Array.from(weatherWidgets).map(async (widget) => {
+        const lat = widget.getAttribute('data-lat');
+        const lon = widget.getAttribute('data-lon');
+        const location = widget.getAttribute('data-location');
+        
+        if (lat && lon) {
+            const weatherData = await fetchWeatherData(lat, lon, location);
+            updateWeatherWidget(widget, weatherData);
+            return weatherData;
+        }
+        return null;
+    });
+    
+    // Wait for all weather data
+    const allWeatherData = await Promise.all(weatherPromises);
+    
+    // Update header weather (use first location - Badrinath)
+    const badrinathWeather = allWeatherData[0];
+    const headerWeather = $('#header-weather');
+    if (headerWeather && badrinathWeather) {
+        headerWeather.textContent = `${badrinathWeather.icon} ${badrinathWeather.temp}°C`;
+    }
+    
+    // Update last update time
+    const lastUpdateEl = $('#weather-last-update');
+    if (lastUpdateEl) {
+        const now = new Date();
+        lastUpdateEl.textContent = now.toLocaleTimeString('en-IN', { 
+            hour: '2-digit', 
+            minute: '2-digit',
+            hour12: true 
+        });
+    }
+    
+    console.log('✅ Weather data updated');
+}
+
+// Initialize weather updates
+function initWeatherUpdates() {
+    // Initial update
+    updateWeather();
+    
+    // Update every 10 minutes (600000 ms)
+    setInterval(updateWeather, 600000);
 }
 
 // ============================================
@@ -858,7 +1060,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initPageLoader();
     initDonationOptions();
     initMegaMenu();
-    updateWeather();
+    initWeatherUpdates(); // Initialize real-time weather updates
     updateYatraStatus();
     
     // Update yatra status every minute

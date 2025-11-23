@@ -8,15 +8,15 @@ This document contains all the Sanskrit shlokas and Devanagari text used through
 
 ### **1. Char Dham Victory Shloka (Registration Page)**
 ```
-श्री यमुनागंगाकेदारबदरीश्वराः विजयन्तेतराम्
+श्रीयमुनागङ्गाकेदारबदरीश्वराः विजयन्ते
 ```
-**Transliteration:** Shri Yamuna-Ganga-Kedara-Badrishvarah Vijayantetaram  
-**Meaning:** Victory to the sacred four dhams - Yamunotri (यमुना), Gangotri (गंगा), Kedarnath (केदार), and Badrinath (बदरीश्वर)  
+**Transliteration:** Shri-Yamuna-Ganga-Kedara-Badrishvarah Vijayante  
+**Meaning:** Victory to the sacred four dhams - Yamunotri (यमुना), Gangotri (गङ्गा), Kedarnath (केदार), and Badrinath (बदरीश्वर)  
 **Usage:** Registration page hero section, Char Dham yatra pages
 
 **Breakdown:**
 - **यमुना** (Yamuna) - Yamunotri Temple
-- **गंगा** (Ganga) - Gangotri Temple  
+- **गङ्गा** (Ganga) - Gangotri Temple  
 - **केदार** (Kedara) - Kedarnath Temple
 - **बदरीश्वर** (Badrishvara) - Badrinath Temple
 - **विजयन्ते** (Vijayante) - Victory to / May they be victorious
@@ -55,8 +55,8 @@ This document contains all the Sanskrit shlokas and Devanagari text used through
 
 ### **4. Sacred Rivers Shloka**
 ```
-गंगे च यमुने चैव गोदावरी सरस्वती।
-नर्मदे सिन्धु कावेरी जलेऽस्मिन् सन्निधिं कुरु॥
+गङ्गे च यमुने चैव गोदावरि सरस्वति।
+नर्मदे सिन्धु कावेरि जलेऽस्मिन् सन्निधिं कुरु॥
 ```
 **Transliteration:**  
 Gange cha Yamune chaiva Godavari Sarasvati  
@@ -65,6 +65,8 @@ Narmade Sindhu Kaveri jale'smin sannidhim kuru
 **Meaning:**  
 O Ganga, Yamuna, Godavari, Sarasvati,  
 Narmada, Sindhu, and Kaveri - please be present in this water
+
+**Correct Form Note:** In proper Sanskrit, long vowel "ī" (ई) should be used at the end of feminine names: गोदावरी, सरस्वती, कावेरी
 
 **Usage:** Parallax section on home page
 

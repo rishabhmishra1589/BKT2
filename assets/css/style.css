@@ -264,7 +264,7 @@ button {
 
 /* Nav Button Adjustments */
 .nav-menu > li > a.btn {
-    color: inherit;
+    /* color: inherit; */
 }
 
 .nav-menu > li > a.btn:hover {
